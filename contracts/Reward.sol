@@ -1,9 +1,9 @@
 // SPDX-Licence-Identifier: UNLICENSED
 pragma solidity ^0.5.0;
 
-contract Tether {
-    string public name = 'Mock Tether Token';
-    string public symbol = 'mUSDT';
+contract RWD {
+    string public name = 'Reward Token';
+    string public symbol = 'RWD';
     // each token is equal to 1*10^18
     uint256 public totalSupply = 1000000000000000000000000; // 1 million tokens
     uint8 public decimals = 18;
@@ -39,7 +39,7 @@ contract Tether {
     }
 
     function approve(address _spender, uint256 _value) public returns(bool success) {
-        allowance[msg.sender][_spender] += _value;
+        allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
