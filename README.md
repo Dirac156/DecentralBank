@@ -2,7 +2,7 @@
 
 ## 1 To Clone or download this project simply run: 
 
-git clone - https://github.com/01Clarian/defi-staking-app-starter.git
+git clone - https://github.com/Dirac156/DecentralBank.git
 
 ### 2. cd into the directory and Install the necessary packages
 
