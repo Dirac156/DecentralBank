@@ -11,7 +11,26 @@ import './App.css';
 
 class App extends Component {
 
-    tokens = number => Web3.utils.toWei(number, 'ether');
+    constructor(props) {
+        super(props);
+        this.state = {
+            account: '0x01',
+            tether: {},
+            rwd: {},
+            decentralBank: {},
+            tetherBalance: '0',
+            rewardBalance: '0',
+            stakingBalance: '0',
+            isLoading: false
+        }
+    }
+
+    async UNSAFE_componentWillMount() {
+        await this.loadWeb3()
+        await this.loadBlockchainData();
+    }
+
+    toWei = number => Web3.utils.toWei(number, 'ether');
     fromWei = number => Web3.utils.fromWei(number, 'ether');
 
     async loadWeb3() {
@@ -63,23 +82,29 @@ class App extends Component {
         this.setState({ isLoading: false });
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            account: '0x01',
-            tether: {},
-            rwd: {},
-            decentralBank: {},
-            tetherBalance: '0',
-            rewardBalance: '0',
-            stakingBalance: '0',
-            isLoading: false
-        }
+    // staking function
+
+    stakeTokens = amount => {
+        this.setState({ isLoading: true });
+        this.state.tether.methods.approve(this.state.decentralBank._address, amount)
+            .send({from: this.state.account })
+            .on('transactionHash', hash => {
+                this.state.decentralBank.methods.depositTokens(amount)
+                    .send({from: this.state.account})
+                    .on('transactionHash', hash => {
+                        this.setState({ isLoading: false });
+                    });
+            });
     }
 
-    async UNSAFE_componentWillMount() {
-        await this.loadWeb3()
-        await this.loadBlockchainData();
+    // unstaking
+    unstakeTokens = () => {
+        this.setState({ isLoading: true });
+        this.state.decentralBank.methods.unstakeTokens()
+            .send({from: this.state.account})
+            .on('transactionHash', hash => {
+                this.setState({ isLoading: false });
+        });
     }
 
     render() {
@@ -96,7 +121,13 @@ class App extends Component {
                                         loading...
                                     </p>
                                     :
-                                    <Main />
+                                    <Main 
+                                        tetherBalance={this.state.tetherBalance}
+                                        rewardBalance={this.state.rewardBalance}
+                                        stakingBalance={this.state.stakingBalance}
+                                        stakeTokens={this.stakeTokens}
+                                        unstakeTokens={this.unstakeTokens}
+                                    />
                                 }
                             </div>
                         </main>

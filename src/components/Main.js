@@ -1,7 +1,12 @@
 import React, { Component} from "react";
+import Web3 from 'web3';
 import tetherImg from "../tether.png";
 
 export default class Main extends Component {
+
+    toWei = number => Web3.utils.toWei(number, 'ether');
+    fromWei = number => Web3.utils.fromWei(number, 'ether');
+
     render(){
         return (
             <div id="content" className="mt-3">
@@ -14,8 +19,8 @@ export default class Main extends Component {
                     </thead>
                     <tbody>
                         <tr style={{color: 'black'}}>
-                            <td>USDT</td>
-                            <td>RWD</td>
+                            <td>{ this.fromWei(this.props.stakingBalance)} USDT</td>
+                            <td>{ this.fromWei(this.props.rewardBalance)} RWD</td>
                         </tr>
                     </tbody>
                 </table>
@@ -27,7 +32,7 @@ export default class Main extends Component {
                                 <b>Stake Tokens</b>
                             </label>
                             <span className="float-right" style={{ marginRight: '8px'}}>
-                                Balance: 
+                                Balance: { this.fromWei(this.props.tetherBalance) }
                             </span>
                             <div className="input-group mb-4">
                                 <input 
