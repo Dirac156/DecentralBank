@@ -5,6 +5,8 @@ import Tether from "../truffle_abis/Tether.json";
 import Rwd from "../truffle_abis/RWD.json";
 import DecentralBank from "../truffle_abis/DecentralBank.json";
 
+import Main from './Main';
+
 import './App.css';
 
 class App extends Component {
@@ -73,7 +75,6 @@ class App extends Component {
             stakingBalance: '0',
             isLoading: false
         }
-        // "0xF771c25B628425Bde1720b12346b683b476A8c48"
     }
 
     async UNSAFE_componentWillMount() {
@@ -85,8 +86,14 @@ class App extends Component {
         return (
             <div>
                 <NavBar account={this.state.account}/>
-                <div className='text-center'>
-                    <h1>{console.log(this.state.isLoading)}</h1>
+                <div className='container-fluid mt-5'>
+                    <div className='row'>
+                        <main role='main' className='col-lg-12 ml-auto mr-auto' style={{ maxWidth: '600px', minHeight: '100vh'}}>
+                            <div>
+                                <Main />
+                            </div>
+                        </main>
+                    </div>
                 </div>
             </div>
         )
