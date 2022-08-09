@@ -90,7 +90,14 @@ class App extends Component {
                     <div className='row'>
                         <main role='main' className='col-lg-12 ml-auto mr-auto' style={{ maxWidth: '600px', minHeight: '100vh'}}>
                             <div>
-                                <Main />
+                                {
+                                    this.state.isLoading ? 
+                                    <p id='loading' className='text-center' style={{ margin: '30px', color: 'black'}}>
+                                        loading...
+                                    </p>
+                                    :
+                                    <Main />
+                                }
                             </div>
                         </main>
                     </div>
