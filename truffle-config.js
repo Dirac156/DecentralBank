@@ -5,8 +5,6 @@ module.exports = {
             port: "7545",
             network_id: '*' // connect to any network
         },
-        // contracts_directory: './src/contracts/',
-        // contracts_build_directory: './src/truffle_abis',
         compilers: {
             solc: {
                 version: '0.8.15',
@@ -17,4 +15,6 @@ module.exports = {
             }
         }
     },
+    contracts_directory: './contracts',
+    contracts_build_directory: './src/truffle_abis',
 }

@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
 import NavBar from './NavBar';
+import Tether from "../truffle_abis/Tether.json";
+import Rwd from "../truffle_abis/RWD.json";
+import DecentralBank from "../truffle_abis/DecentralBank.json";
 
 import './App.css';
 
 class App extends Component {
+
+    tokens = number => Web3.utils.toWei(number, 'ether');
+    fromWei = number => Web3.utils.fromWei(number, 'ether');
 
     async loadWeb3() {
         if (window.ethereum) {
@@ -18,9 +24,41 @@ class App extends Component {
     }
 
     async loadBlockchainData(){
+        this.setState({ isLoading: true });
         const web3 = window.web3;
         const account =await  web3.eth.getAccounts();
         this.setState({ account: account[0] })
+        const networkId = await web3.eth.net.getId();
+
+        // Load tether contract
+        const tetherData = Tether.networks[networkId];
+        if (tetherData) {
+            const tether = new web3.eth.Contract(Tether.abi, tetherData.address);
+            let tetherBalance = await tether.methods.balanceOf(this.state.account).call();
+            this.setState({ tether, tetherBalance: tetherBalance.toString() });
+        } else {
+            window.alert('Error! Tether contract not deployed - no detected network!');
+        }
+
+        const rwdData = Rwd.networks[networkId];
+        if (rwdData){
+            const rwd = new web3.eth.Contract(Rwd.abi, rwdData.address);
+            let rewardBalance = await rwd.methods.balanceOf(this.state.account).call();
+            this.setState({ rwd, rewardBalance: rewardBalance.toString()});
+        }else {
+            window.alert('Error! Tether contract not deployed - no detected network!');
+        }
+
+        const decentralBankData = DecentralBank.networks[networkId];
+        if (decentralBankData) {
+            const decentralBank = new web3.eth.Contract(DecentralBank.abi, decentralBankData.address);
+            let stakingBalance = await decentralBank.methods.stakingBalance(this.state.account).call();
+            this.setState({ decentralBank, stakingBalance: stakingBalance.toString() });
+        }else {
+            window.alert('Error! Tether contract not deployed - no detected network!');
+        }
+
+        this.setState({ isLoading: false });
     }
 
     constructor(props) {
@@ -47,6 +85,9 @@ class App extends Component {
         return (
             <div>
                 <NavBar account={this.state.account}/>
+                <div className='text-center'>
+                    <h1>{console.log(this.state.isLoading)}</h1>
+                </div>
             </div>
         )
     }
