@@ -26,7 +26,13 @@ export default class Main extends Component {
                 </table>
 
                 <div className="card mb-2" style={{ opacity: '.9'}}>
-                    <form className="mb-3">
+                    <form className="mb-3" 
+                        onSubmit={event => {
+                            event.preventDefault();
+                            let amount = this.toWei(this.input.value.toString())
+                            this.props.stakeTokens(amount);
+                        }}
+                    >
                         <div style={{ borderSpacing: '0 1em'}}>
                             <label className="float-left" style={{ marginLeft: '15px'}}>
                                 <b>Stake Tokens</b>
@@ -36,6 +42,7 @@ export default class Main extends Component {
                             </span>
                             <div className="input-group mb-4">
                                 <input 
+                                    ref={ input => this.input = input }
                                     type="text"
                                     placeholder="0"
                                     required
@@ -51,7 +58,10 @@ export default class Main extends Component {
                             <button type="submit" className="btn btn-primary btn-lg btn-block">DEPOSIT</button>
                         </div>
                     </form>
-                    <button type="submit" className="btn btn-primary btn-lg btn-block">WITHDRAW</button>
+                    <button 
+                        className="btn btn-primary btn-lg btn-block" 
+                        onClick={this.props.unstakeTokens}
+                    >WITHDRAW</button>
                     <div className="card-body text-center" style={{ color: 'Blue'}}>
                         AIRDROP
                     </div>
